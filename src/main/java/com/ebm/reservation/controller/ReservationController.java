@@ -31,10 +31,12 @@ public class ReservationController {
         if (!reservationService.userExists(reservation.getUser_id())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        if (!reservationService.vehicleIsAvailable(reservation.getVehicle_id())) {
+        if (!reservationService.vehicleExists(reservation.getVehicle_id())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle not available");
         }
-//                && reservationService.dateIsAvailable(reservation.getStartDate(), reservation.getEndDate()))
+        if(!reservationService.dateIsAvailable(reservation.getStartDate(), reservation.getEndDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dates not available");
+        }
             double price = reservationService.calculatePrice(reservation.getVehicle_id(), reservation.getKilometers());
             reservation.setRes_price(price);
             return reservationService.createReservation(reservation);

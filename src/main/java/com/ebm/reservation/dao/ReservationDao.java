@@ -8,5 +8,4 @@ import java.util.List;
 public interface ReservationDao extends CrudRepository<Reservation, Integer> {
     List<Reservation> findAll();
     Reservation findById(int id);
-//    List<Reservation> findDatesAvailable(Date startDate, Date endDate);
 }

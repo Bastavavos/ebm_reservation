@@ -1,11 +1,11 @@
 package com.ebm.reservation.service;
+
 import com.ebm.reservation.dao.ReservationDao;
 import com.ebm.reservation.dto.User;
 import com.ebm.reservation.dto.Vehicle;
 import com.ebm.reservation.model.Reservation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,24 +15,31 @@ import java.util.List;
 @Service
 public class ReservationService {
     ReservationDao dao;
+
     public ReservationService(ReservationDao dao) {
         this.dao = dao;
     }
+
     public List<Reservation> getAll() {
         return dao.findAll();
     }
+
     public Reservation getById(int id) {
         return dao.findById(id);
     }
+
     public Reservation createReservation(Reservation reservation) {
         return dao.save(reservation);
     }
+
     public Reservation updateReservation(Reservation reservation) {
         return dao.save(reservation);
     }
+
     public void deleteReservation(Reservation reservation) {
         dao.delete(reservation);
     }
+
     public void deleteAll() {
         dao.deleteAll();
     }
@@ -46,11 +53,10 @@ public class ReservationService {
         }
     }
 
-    // accéder à la liste des réservations pour comparer les dates demandées par l'utilisateur et les dates où le véhicule n'est pas réservé
-    public boolean vehicleIsAvailable(int vehicle_id) {
+    public boolean vehicleExists(int vehicle_id) {
         RestTemplate restTemplate = new RestTemplate();
         Vehicle vehicle = restTemplate.getForObject("http://192.168.1.236:8080/vehicles/" + vehicle_id, Vehicle.class);
-        if (vehicle != null) { //&& vehicle.getIsAvailable()
+        if (vehicle != null) {
             return true;
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found");
@@ -72,9 +78,14 @@ public class ReservationService {
         };
     }
 
-    //    public boolean dateIsAvailable(Date startDate, Date endDate) {
-//        List<Reservation> reservations = dao.findDatesAvailable(startDate, endDate);
-//        return reservations.isEmpty();
-//    }
-
+    public boolean dateIsAvailable(Date startDate, Date endDate) {
+        // Check if the dates are available based on existing reservations
+        List<Reservation> reservations = dao.findAll();
+        for (Reservation reservation : reservations) {
+            if (startDate.before(reservation.getEndDate()) && endDate.after(reservation.getStartDate())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
