@@ -5,6 +5,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Vehicle {
+    private String type;
+    private float volumeCapacity;
+    private int engineCapacityCm3;
+
     private int id;
     private String brand;
     private String model;
@@ -19,6 +23,9 @@ public class Vehicle {
 
     public String toString() {
         return "Vehicle{" +
+                "type=" + type +
+                "volumeCapacity=" + volumeCapacity +
+                "engineCapacityCm3=" + engineCapacityCm3 +
                 "id=" + id +
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +

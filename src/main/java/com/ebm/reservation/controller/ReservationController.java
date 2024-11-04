@@ -28,13 +28,17 @@ public class ReservationController {
 
     @PostMapping("reservations")
     public Reservation createReservation(@RequestBody Reservation reservation) {
-        if (reservationService.userExists(reservation.getUser_id()) && reservationService.vehicleIsAvailable(reservation.getVehicle_id())
-                && reservationService.dateIsAvailable(reservation.getStartDate(), reservation.getEndDate())) {
-            return reservationService.createReservation(reservation);
-        } else {
+        if (!reservationService.userExists(reservation.getUser_id())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-    }
+        if (!reservationService.vehicleIsAvailable(reservation.getVehicle_id())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle not available");
+        }
+//                && reservationService.dateIsAvailable(reservation.getStartDate(), reservation.getEndDate()))
+            double price = reservationService.calculatePrice(reservation.getVehicle_id(), reservation.getKilometers());
+            reservation.setRes_price(price);
+            return reservationService.createReservation(reservation);
+        }
 
     @PutMapping("reservations/{id}")
     public Reservation updateReservation(@PathVariable int id, @RequestBody Reservation reservation) {

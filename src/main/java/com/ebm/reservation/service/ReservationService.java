@@ -57,30 +57,24 @@ public class ReservationService {
         }
     }
 
-    public boolean dateIsAvailable(Date startDate, Date endDate) {
-        List<Reservation> reservations = dao.findDatesAvailable(startDate, endDate);
-        return reservations.isEmpty();
+    public double calculatePrice(int vehicle_id, int kilometers) {
+        RestTemplate restTemplate = new RestTemplate();
+        Vehicle vehicle = restTemplate.getForObject("http://192.168.1.236:8080/vehicles/" + vehicle_id, Vehicle.class);
+        assert vehicle != null;
+        return switch (vehicle.getType()) {
+            case "Car" -> vehicle.getBase_price() + vehicle.getKm_price() * kilometers;
+            case "Motorcycle" ->
+                    vehicle.getBase_price() + vehicle.getEngineCapacityCm3() * 0.001 * vehicle.getKm_price() * kilometers;
+            case "UtilityVehicle" ->
+                    vehicle.getBase_price() + vehicle.getVolumeCapacity() * 0.05 * vehicle.getKm_price() * kilometers;
+
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid vehicle");
+        };
     }
 
-
-//    public double calculatePrice(int vehicle_id) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        Vehicle vehicle = restTemplate.getForObject("http://localhost:9090/vehicles/" + vehicle_id, Vehicle.class);
-//        if (vehicle_type.equals("Car")) {
-//            return basePrice + kmPrice * nbKm;
-//        } else if (vehicleType.equals("Motor")) {
-//            if (cylindre == 0) {
-    // gérer l'erreur
-//            }
-//            return basePrice + cylindre * 0.001 * kmPrice * nbKm;
-//        } else if (vehicleType.equals("Utility")) {
-//            if (volume == 0) {
-    // gérer l'erreur
-//            }
-//            return basePrice + volume * 0.05 * kmPrice * nbKm;
-//        } else {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid vehicle type");
-//        }
+    //    public boolean dateIsAvailable(Date startDate, Date endDate) {
+//        List<Reservation> reservations = dao.findDatesAvailable(startDate, endDate);
+//        return reservations.isEmpty();
 //    }
 
 }

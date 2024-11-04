@@ -19,7 +19,7 @@ public class Reservation {
     private Date startDate;
     private Date endDate;
     private int kilometers;
-    private float res_price;
+    private double res_price;
 
     public Reservation() {
     }
