@@ -9,12 +9,14 @@ public class Vehicle {
     private float volumeCapacity;
     private int engineCapacityCm3;
 
+    private int fiscalPower;
+
     private int id;
     private String brand;
     private String model;
     private String color;
-    private float base_price;
-    private float km_price;
+    private float basePrice;
+    private float kmPrice;
     private String matriculation;
 
     public Vehicle() {
@@ -30,8 +32,8 @@ public class Vehicle {
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
                 ", color='" + color + '\'' +
-                ", base_price=" + base_price +
-                ", km_price=" + km_price +
+                ", base_price=" + basePrice +
+                ", km_price=" + kmPrice +
                 ", matriculation='" + matriculation + '\'' +
                 '}';
     }

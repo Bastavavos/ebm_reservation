@@ -1,11 +1,7 @@
 package com.ebm.reservation.controller;
 import com.ebm.reservation.model.Reservation;
 import com.ebm.reservation.service.ReservationService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -26,21 +22,15 @@ public class ReservationController {
         return reservationService.getById(id);
     }
 
+    @GetMapping("reservations/user/{userId}")
+    public List<Reservation> getByUserId(@PathVariable int userId) {
+        return reservationService.getByUserId(userId);
+    }
+
     @PostMapping("reservations")
     public Reservation createReservation(@RequestBody Reservation reservation) {
-        if (!reservationService.userExists(reservation.getUser_id())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        }
-        if (!reservationService.vehicleExists(reservation.getVehicle_id())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle not available");
-        }
-        if(!reservationService.dateIsAvailable(reservation.getStartDate(), reservation.getEndDate())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dates not available");
-        }
-            double price = reservationService.calculatePrice(reservation.getVehicle_id(), reservation.getKilometers());
-            reservation.setRes_price(price);
-            return reservationService.createReservation(reservation);
-        }
+        return reservationService.createReservation(reservation);
+    }
 
     @PutMapping("reservations/{id}")
     public Reservation updateReservation(@PathVariable int id, @RequestBody Reservation reservation) {

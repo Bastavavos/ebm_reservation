@@ -14,12 +14,12 @@ public class Reservation {
     @Id
     @GeneratedValue
     private int id;
-    private int user_id;
-    private int vehicle_id;
+    private int userId;
+    private int vehicleId;
     private Date startDate;
     private Date endDate;
     private int kilometers;
-    private double res_price;
+    private double resPrice;
 
     public Reservation() {
     }
@@ -28,12 +28,12 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
-                ", user_id=" + user_id +
-                ", vehicle_id=" + vehicle_id +
+                ", userId=" + userId +
+                ", vehicleId=" + vehicleId +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", kilometers=" + kilometers +
-                ", res_price=" + res_price +
+                ", resPrice=" + resPrice +
                 '}';
     }
 }
