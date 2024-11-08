@@ -8,8 +8,8 @@ public class User {
     private int id;
     private String firstName;
     private String lastName;
-    private long age;
-    private Long driveLicenseNumber;
+    private int age;
+    private String licenseNumber;
 
     public User() {
     }
@@ -20,7 +20,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
-                ", driveLicenseNumber=" + driveLicenseNumber +
+                ", driveLicenseNumber=" + licenseNumber +
                 '}';
     }
 }

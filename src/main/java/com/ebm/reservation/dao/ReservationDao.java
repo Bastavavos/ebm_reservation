@@ -7,5 +7,5 @@ import java.util.List;
 public interface ReservationDao extends CrudRepository<Reservation, Integer> {
     List<Reservation> findAll();
     Reservation findById(int id);
-    List<Reservation> findByUserId(int userId);
+    List<Reservation> findByUserId(int userId);;
 }

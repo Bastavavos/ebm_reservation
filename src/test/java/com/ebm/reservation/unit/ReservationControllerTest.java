@@ -28,13 +28,11 @@ public class ReservationControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-//    @Test
-//    public void testCreate() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.post("/reservations")
-//                .contentType("application/json")
-//                .content("{\"user_id\":8,\"vehicle_id\":1,\"startDate\":\"2023-01-01\",\"endDate\":\"2023-01-02\",\"kilometers\":100,\"res_price\":100.0}"))
-//                .andExpect(MockMvcResultMatchers.status().isOk());
-//    }
+    @Test
+    public void testGetByUserId() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/reservations/user/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
     @Test
     public void testUpdate() throws Exception {

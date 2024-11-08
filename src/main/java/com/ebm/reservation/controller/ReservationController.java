@@ -47,4 +47,11 @@ public class ReservationController {
     public void deleteAll() {
         reservationService.deleteAll();
     }
+
+// just to test
+//    @GetMapping("reservations/vehicles")
+//    public List<Vehicle> getAllVehicles() {
+//        return reservationService.getAllVehicles();
+//    }
+
 }
