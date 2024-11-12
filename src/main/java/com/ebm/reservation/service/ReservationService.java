@@ -26,9 +26,6 @@ public class ReservationService {
         return dao.findById(id);
     }
     public List<Reservation> getByUserId(int userId) { return dao.findByUserId(userId); }
-    public Reservation updateReservation(Reservation reservation) {
-        return dao.save(reservation);
-    }
     public void deleteReservation(Reservation reservation) {
         dao.delete(reservation);
     }
@@ -41,12 +38,30 @@ public class ReservationService {
         User user = getUser(reservation.getUserId());
         Vehicle vehicle = getVehicle(reservation.getVehicleId());
 
-        checkReservation(user, vehicle, reservation);
-
+        checkReservation(user, vehicle, reservation, false);
         double price = calculatePrice(vehicle, reservation.getKilometers());
         reservation.setResPrice(price);
 
         return dao.save(reservation);
+    }
+
+    public Reservation updateReservation(Reservation reservation) {
+        Reservation existingReservation = dao.findById(reservation.getId());
+
+        existingReservation.setVehicleId(reservation.getVehicleId());
+        existingReservation.setStartDate(reservation.getStartDate());
+        existingReservation.setEndDate(reservation.getEndDate());
+        existingReservation.setKilometers(reservation.getKilometers());
+
+        User user = getUser(existingReservation.getUserId());
+        Vehicle vehicle = getVehicle(existingReservation.getVehicleId());
+
+        checkReservation(user, vehicle, existingReservation, true);
+
+        double price = calculatePrice(vehicle, existingReservation.getKilometers());
+        existingReservation.setResPrice(price);
+
+        return dao.save(existingReservation);
     }
 
     public User getUser(int userId) {
@@ -102,10 +117,11 @@ public class ReservationService {
         }
     }
 
-    public void checkReservation(User user, Vehicle vehicle, Reservation reservation) {
-        userHasReservation(user.getId());
-        dateAndVehicleIsAvailable(reservation.getStartDate(), reservation.getEndDate(), vehicle);
-
+    public void checkReservation(User user, Vehicle vehicle, Reservation reservation, boolean isUpdate) {
+        if (!isUpdate) {
+            userHasReservation(user.getId());
+            dateAndVehicleIsAvailable(reservation.getStartDate(), reservation.getEndDate(), vehicle);
+        }
         if (user.getAge() < 21 && vehicle.getFiscalPower() >= 8)  {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must be older than 21 years to use a vehicle with 8 or more fiscal power");
         }
@@ -113,7 +129,6 @@ public class ReservationService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must be older than 25 years to use a vehicle with 13 or more fiscal power");
         }
     }
-
 //    public List<Vehicle> getAllVehicles() {
 //        RestTemplate restTemplate = new RestTemplate();
 //        ResponseEntity<List<Vehicle>> response = restTemplate.exchange(
@@ -124,5 +139,4 @@ public class ReservationService {
 //        );
 //        return response.getBody();
 //    }
-
 }
