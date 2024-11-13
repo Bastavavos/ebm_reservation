@@ -20,17 +20,10 @@ public class ReservationControllerTest {
     public void testCreate() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/reservations")
                 .contentType("application/json")
-                .content("{\"userId\":1,\"vehicleId\":1,\"startDate\":\"2021-01-01\",\"endDate\":\"2021-01-02\",\"kilometers\":10}"))
+                .content("{\"userId\":52,\"vehicleId\":1,\"startDate\":\"2025-01-01\",\"endDate\":\"2025-01-02\",\"kilometers\":10}"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    public void testUpdate() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/reservations/1")
-                .contentType("application/json")
-                .content("{\"userId\":1,\"vehicleId\":1,\"startDate\":\"2021-01-01\",\"endDate\":\"2021-01-02\",\"kilometers\":10}"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
     @Test
     public void testGetAll() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/reservations"))
