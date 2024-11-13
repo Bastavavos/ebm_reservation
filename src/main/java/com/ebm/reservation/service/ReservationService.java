@@ -4,6 +4,7 @@ import com.ebm.reservation.dao.ReservationDao;
 import com.ebm.reservation.dto.User;
 import com.ebm.reservation.dto.Vehicle;
 import com.ebm.reservation.model.Reservation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,10 +16,9 @@ import java.util.List;
 
 @Service
 public class ReservationService {
+
     ReservationDao dao;
-    public ReservationService(ReservationDao dao) {
-        this.dao = dao;
-    }
+    private final RestTemplate restTemplate;
     public List<Reservation> getAll() {
         return dao.findAll();
     }
@@ -33,6 +33,11 @@ public class ReservationService {
         dao.deleteAll();
     }
 
+    @Autowired
+    public ReservationService(ReservationDao reservationDao, RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+        this.dao = reservationDao;
+    }
     public Reservation createReservation(Reservation reservation) {
 
         User user = getUser(reservation.getUserId());
@@ -65,8 +70,7 @@ public class ReservationService {
     }
 
     public User getUser(int userId) {
-        RestTemplate restTemplate = new RestTemplate();
-        User user = restTemplate.getForObject("http://localhost:9090/users/" + userId, User.class);
+        User user = restTemplate.getForObject("http://USER/users/" + userId, User.class);
 //      "http://192.168.1.85:8080/users/"
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
@@ -75,8 +79,7 @@ public class ReservationService {
     }
 
     public Vehicle getVehicle(int vehicleId) {
-        RestTemplate restTemplate = new RestTemplate();
-        Vehicle vehicle = restTemplate.getForObject("http://192.168.1.236:8080/vehicles/" + vehicleId, Vehicle.class);
+        Vehicle vehicle = restTemplate.getForObject("http://FINDMYCAR/vehicles/" + vehicleId, Vehicle.class);
         if (vehicle == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found");
         }

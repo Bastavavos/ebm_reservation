@@ -17,6 +17,21 @@ public class ReservationControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    public void testCreate() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/reservations")
+                .contentType("application/json")
+                .content("{\"userId\":1,\"vehicleId\":1,\"startDate\":\"2021-01-01\",\"endDate\":\"2021-01-02\",\"kilometers\":10}"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/reservations/1")
+                .contentType("application/json")
+                .content("{\"userId\":1,\"vehicleId\":1,\"startDate\":\"2021-01-01\",\"endDate\":\"2021-01-02\",\"kilometers\":10}"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+    @Test
     public void testGetAll() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/reservations"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -34,13 +49,6 @@ public class ReservationControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    public void testUpdate() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/reservations/1")
-                .contentType("application/json")
-                .content("{\"user_id\":8,\"vehicle_id\":1,\"startDate\":\"2023-01-01\",\"endDate\":\"2023-01-02\",\"kilometers\":100,\"res_price\":100.0}"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
 
     @Test
     public void testDeleteAll() throws Exception {
